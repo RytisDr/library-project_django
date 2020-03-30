@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from catalog_app.models import Book, Author, BookInstance, Genre
 from django.views import generic
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
+@login_required
 def index(request):
 
     num_books = Book.objects.all().count()
@@ -24,6 +26,7 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
+@login_required
 def BookList(request):
     books = Book.objects.all()
     context = {

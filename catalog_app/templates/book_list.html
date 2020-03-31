@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Book List</h1>
+  <h1>Available books</h1>
   {% if book_list %}
   <ul>
     {% for book in book_list %}
       <li>
-        <a href="{% comment %} {{ book.get_absolute_url }} {% endcomment %}">{{ book.title }}</a> ({{book.author}})
+        {{ book.title }} ({{book.author}}) 
       </li>
+      {{book.genre_names}}
+      <form method="POST" action="{% url 'catalog_app:check_out_book' %}">
+      {% csrf_token %}
+      <button >Check-out</button>
+      <input type="hidden" name="id" value="{{ book.pk }}">
+      </form>
     {% endfor %}
   </ul>
   {% else %}
-    <p>There are no books in the library.</p>
+    <p>There are no books available.</p>
   {% endif %}       
 {% endblock %}

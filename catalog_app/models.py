@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 import uuid
-# Create your models here
+from django.contrib.auth.models import User
 
 
 class Genre(models.Model):
@@ -19,22 +19,9 @@ class Book(models.Model):
     isbn = models.CharField('ISBN', max_length=13,
                             help_text='13 Character ISBN')
     genre = models.ManyToManyField(Genre, help_text='Select a genre')
-
-    def __str__(self):
-        return self.title
-
-
-"""     def get_absolute_url(self):
-        return reverse('book-detail', args=[str(self.id)]) """
-
-
-class BookInstance(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4,
-                          help_text='Unique ID for this particular book across whole library')
-    book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
-    imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
-
+    loaned_to = models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=True, null=True)
     LOAN_STATUS = (
         ('m', 'Maintenance'),
         ('o', 'On loan'),
@@ -46,16 +33,20 @@ class BookInstance(models.Model):
         max_length=1,
         choices=LOAN_STATUS,
         blank=True,
-        default='m',
+        default='a',
         help_text='Book availability',
     )
 
     class Meta:
         ordering = ['due_back']
 
-    def __str__(self):
+    def genre_names(self):
+        return ', '.join([i.name for i in self.genre.all()])
 
-        return f'{self.id} ({self.book.title})'
+    def __str__(self):
+        return f'{self.title}'
+    # def get_absolute_url(self):
+     #   return reverse('book-detail', args=[str(self.id)])
 
 
 class Author(models.Model):
@@ -67,8 +58,8 @@ class Author(models.Model):
     class Meta:
         ordering = ['last_name', 'first_name']
 
-    def get_absolute_url(self):
-        return reverse('author-detail', args=[str(self.id)])
+    # def get_absolute_url(self):
+    #    return reverse('author-detail', args=[str(self.id)])
 
     def __str__(self):
         return f'{self.last_name}, {self.first_name}'

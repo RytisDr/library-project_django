@@ -33,6 +33,8 @@ def bookList(request):
 
 @login_required
 def check_out_book(request):
+    if not request.POST:
+        return HttpResponseRedirect(reverse('catalog_app:books'))
     borrowed_books_amount = Book.objects.filter(loaned_to=request.user).count()
     if borrowed_books_amount < 10:
         pk = request.POST['id']

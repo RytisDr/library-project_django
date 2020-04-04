@@ -9,11 +9,13 @@
         {{ book.title }} ({{book.author}}) 
       </li>
       {{book.genre_names}}
-      <form method="POST" action="{% url 'catalog_app:check_out_book' %}">
-      {% csrf_token %}
-      <button >Check-out</button>
-      <input type="hidden" name="id" value="{{ book.pk }}">
-      </form>
+      {% if not request.user.is_staff %}
+        <form method="POST" action="{% url 'catalog_app:check_out_book' %}">
+          {% csrf_token %}
+          <button >Check-out</button>
+          <input type="hidden" name="id" value="{{ book.pk }}">
+        </form>
+      {% endif %}
     {% endfor %}
   </ul>
   {% else %}

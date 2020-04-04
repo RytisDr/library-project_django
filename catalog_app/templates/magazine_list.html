@@ -9,11 +9,13 @@
       <li>
         {{ magazine.title }} ({{magazine.issue}}) 
       </li>
-      <form method="POST" action="{% url 'catalog_app:check_out_magazine' %}">
-      {% csrf_token %}
-      <button >Check-out</button>
-      <input type="hidden" name="id" value="{{ magazine.pk }}">
-      </form>
+      {% if not request.user.is_staff %}
+        <form method="POST" action="{% url 'catalog_app:check_out_magazine' %}">
+          {% csrf_token %}
+          <button >Check-out</button>
+          <input type="hidden" name="id" value="{{ magazine.pk }}">
+        </form>
+      {% endif %}
     {% endfor %}
   </ul>
   {% else %}

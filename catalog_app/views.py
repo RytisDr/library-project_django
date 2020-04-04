@@ -9,7 +9,6 @@ from datetime import datetime, timedelta, date
 
 @login_required
 def index(request):
-
     num_books = Book.objects.all().count()
     num_authors = Author.objects.count()
     num_magazines = Magazine.objects.all().count()
@@ -39,6 +38,21 @@ def magazine_list(request):
         'magazine_list': magazines,
     }
     return render(request, 'magazine_list.html', context)
+
+
+@login_required
+def past_due(request):
+    user = request.user
+    if user.is_staff:
+        magazines_on_loan = Magazine.objects.filter(status="o")
+        for magazine in magazines_on_loan:
+
+        books_on_loan = Book.objects.filter(status="o")
+
+        context = {}
+        return render(request, 'past_due.html', context)
+    else:
+        return HttpResponseRedirect(reverse('catalog_app:index'))
 
 
 @login_required
@@ -84,7 +98,7 @@ def check_out_magazine(request):
         magazine = get_object_or_404(Magazine, pk=pk)
         magazine.status = 'o'
         magazine.loaned_to = user
-        magazine.due_back = datetime.now()+timedelta(days=30)
+        magazine.due_back = datetime.now()+timedelta(days=7)
         magazine.save()
         return HttpResponseRedirect(reverse('catalog_app:magazines'))
     else:

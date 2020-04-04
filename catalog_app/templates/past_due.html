@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Articles past due date</title>{% endblock %}
+{% block content %}
+    <h1>Late books and magazines</h1>
+  {% if magazine_list %}
+    <ul>
+    {% for magazine in magazine_list %}
+      <li>
+        {{ magazine.title }} ({{magazine.issue}}) 
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>No books/magazines are past due date.</p>
+  {% endif %}       
+{% endblock %}

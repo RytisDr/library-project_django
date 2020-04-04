@@ -18,8 +18,6 @@ def index(request):
         'num_authors': num_authors,
         'num_magazines': num_magazines,
     }
-
-    # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
 
 
@@ -83,14 +81,14 @@ def check_out_book(request):
     if not request.POST:
         return HttpResponseRedirect(reverse('catalog_app:books'))
     user = request.user
-    user_magazines = Book.objects.filter(loaned_to=user)
+    user_books = Book.objects.filter(loaned_to=user)
     # check if any books past due date
-    for book in user_magazines:
+    for book in user_books:
         due_back = book.due_back
         if due_back < date.today():
             return HttpResponse('<h1>You have some books past due date, return them first.</h1>')
     # limit check-out to 10 books
-    borrowed_books_amount = user_magazines.count()
+    borrowed_books_amount = user_books.count()
     if borrowed_books_amount < 10:
         pk = request.POST['id']
         book = get_object_or_404(Book, pk=pk)

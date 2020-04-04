@@ -126,3 +126,20 @@ def check_out_magazine(request):
         return HttpResponseRedirect(reverse('catalog_app:magazines'))
     else:
         return HttpResponse('<h1>Cant have more than 3 magazines at the same time.</h1>')
+
+
+@login_required
+def return_article(request):
+    if not request.POST:
+        return HttpResponseRedirect(reverse('catalog_app:my_books'))
+    # turn string into variable name
+    type_of_return = eval(request.POST['type'])
+    article_pk = request.POST['pk']
+    item_to_return = get_object_or_404(type_of_return, pk=article_pk)
+    if(item_to_return):
+        item_to_return.due_back = None
+        item_to_return.loaned_to = None
+        item_to_return.status = 'a'
+        item_to_return.save()
+
+    return HttpResponseRedirect(reverse('catalog_app:my_books'))

@@ -10,6 +10,7 @@ urlpatterns = [
     path('check_out_book/', views.check_out_book, name='check_out_book'),
     path('check_out_magazine/', views.check_out_magazine,
          name='check_out_magazine'),
+    path('return/', views.return_article, name='return'),
     path('past_due/', views.past_due, name='past_due'),
     path('my_books/', views.my_books, name='my_books'),
 ]

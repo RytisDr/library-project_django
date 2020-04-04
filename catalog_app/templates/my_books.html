@@ -1,32 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}<title>Borrowed books</title>{% endblock %}
+{% block title %}<title>Borrowed books/magazines</title>{% endblock %}
 {% block content %}
     <h1>Books and magazines you have borrowed.</h1>
     {% if my_magazines %}
         <h3>Magazines</h3>
         <ul>
             {% for magazine in my_magazines %}
-              <li>
-                {{ magazine.title }} (issue: {{magazine.issue}}) -
-                <strong>Due by:</strong>
-                {{magazine.due_back}} ({{ magazine.days_left }})
-              </li>
+                <li>
+                    {{ magazine.title }} (issue: {{magazine.issue}}) -
+                    <strong>Due by:</strong>
+                    {{magazine.due_back}} ({{ magazine.days_left }})
+                    <form method="POST" action="{% url 'catalog_app:return' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="pk" value="{{ magazine.pk }}">
+                        <input type="hidden" name="type" value="{{ magazine.get_class_name }}">
+                        <button>Return</button>
+                    </form>
+                </li>
             {% endfor %}
         </ul>
+    {% endif %}
     {% if my_books %}
         <h3>Books</h3>
         <ul>
             {% for book in my_books %}
-              <li>
-                {{ book.title }} ({{book.author}}) -
-                <strong>Due by:</strong>
-                 {{book.due_back}}
-                 ({{ book.days_left }})
+                <li>
+                    {{ book.title }} ({{book.author}}) -
+                    <strong>Due by:</strong>
+                    {{book.due_back}} ({{ book.days_left }})
+                    <form method="POST" action="{% url 'catalog_app:return' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="pk" value="{{ book.pk }}">
+                        <input type="hidden" name="type" value="{{ book.get_class_name }}">
+                        <button>Return</button>
+                    </form>
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
-    {% else %}
+    {% if not my_books and not my_magazines %}
     <p>You dont have any books/magazines borrowed.</p>
     {% endif %} 
 

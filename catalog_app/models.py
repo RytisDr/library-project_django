@@ -3,6 +3,9 @@ from django.urls import reverse
 import uuid
 from django.contrib.auth.models import User
 from datetime import date
+from django import template
+
+register = template.Library()
 
 
 class Genre(models.Model):
@@ -53,6 +56,10 @@ class Book(models.Model):
             return "Overdue!"
         else:
             return f'{days_left.days} days left'
+
+    @register.simple_tag
+    def get_class_name(self):
+        return self.__class__.__name__
 
     def __str__(self):
         return f'{self.title}'
@@ -111,6 +118,10 @@ class Magazine(models.Model):
             return "Overdue!"
         else:
             return f'{days_left.days} days left'
+
+    @register.simple_tag
+    def get_class_name(self):
+        return self.__class__.__name__
 
     def __str__(self):
         return f'{self.title}'

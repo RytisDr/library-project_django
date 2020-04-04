@@ -14,6 +14,7 @@
         </li>
       {% endfor %}
     </ul>
+  {% endif %}
   {% if late_books %}
     <h3>Books</h3>
     <ul>
@@ -26,7 +27,7 @@
       {% endfor %}
     </ul>
   {% endif %}
-  {% else %}
+  {% if not late_books and not late_magazines %}
     <p>No books/magazines are past due date.</p>
   {% endif %} 
 

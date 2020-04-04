@@ -62,6 +62,23 @@ def past_due(request):
 
 
 @login_required
+def my_books(request):
+    user = request.user
+    if not user.is_staff:
+        context = collections.defaultdict(list)
+        books_on_loan = Book.objects.filter(loaned_to=user)
+        magazines_on_loan = Magazine.objects.filter(loaned_to=user)
+        for magazine in magazines_on_loan:
+            context["my_magazines"].append(magazine)
+        for book in books_on_loan:
+            context["my_books"].append(book)
+
+        return render(request, 'my_books.html', context)
+    else:
+        return HttpResponseRedirect(reverse('catalog_app:index'))
+
+
+@login_required
 def check_out_book(request):
     if not request.POST:
         return HttpResponseRedirect(reverse('catalog_app:books'))

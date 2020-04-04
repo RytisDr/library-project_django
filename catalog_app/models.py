@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 import uuid
 from django.contrib.auth.models import User
+from datetime import date
 
 
 class Genre(models.Model):
@@ -43,10 +44,18 @@ class Book(models.Model):
     def genre_names(self):
         return ', '.join([i.name for i in self.genre.all()])
 
+    def days_left(self):
+        today = date.today()
+        days_left = self.due_back - today
+        if(days_left.days == 0):
+            return "Today"
+        if(days_left.days < 0):
+            return "Overdue!"
+        else:
+            return days_left.days + "days left"
+
     def __str__(self):
         return f'{self.title}'
-    # def get_absolute_url(self):
-     #   return reverse('book-detail', args=[str(self.id)])
 
 
 class Author(models.Model):
@@ -92,6 +101,16 @@ class Magazine(models.Model):
 
     class Meta:
         ordering = ['due_back']
+
+    def days_left(self):
+        today = date.today()
+        days_left = self.due_back - today
+        if(days_left.days == 0):
+            return "Today"
+        if(days_left.days < 0):
+            return "Overdue!"
+        else:
+            return f'{days_left.days} days left'
 
     def __str__(self):
         return f'{self.title}'

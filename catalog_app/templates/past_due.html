@@ -2,28 +2,30 @@
 
 {% block title %}<title>Articles past due date</title>{% endblock %}
 {% block content %}
-    <h1>Late books and magazines</h1>
+  <h1>Late books and magazines</h1>
   {% if late_magazines %}
     <h3>Magazines</h3>
     <ul>
-    {% for magazine in late_magazines %}
-      <li>
-        {{ magazine.title }} (issue: {{magazine.issue}}) -
-        <strong>Loaned to:</strong> {{magazine.loaned_to}} 
-        {% if magazine.loaned_to.email %} with <strong> email: </strong> {{magazine.loaned_to.email}} {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
-  {% elif late_books%}
+      {% for magazine in late_magazines %}
+        <li>
+          {{ magazine.title }} (issue: {{magazine.issue}}) -
+          <strong>Loaned to:</strong> {{magazine.loaned_to}} 
+          {% if magazine.loaned_to.email %} with <strong> email: </strong> {{magazine.loaned_to.email}} {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% if late_books %}
     <h3>Books</h3>
     <ul>
-    {% for book in late_books %}
-      <li>
-        {{ book.title }} ({{book.author}}) -
-        <strong>Loaned to:</strong> {{book.loaned_to}} 
-        {% if book.loaned_to.email %} with <strong> email: </strong> {{book.loaned_to.email}} {% endif %}
-      </li>
-    {% endfor %}
+      {% for book in late_books %}
+        <li>
+          {{ book.title }} ({{book.author}}) -
+          <strong>Loaned to:</strong> {{book.loaned_to}} 
+          {% if book.loaned_to.email %} with <strong> email: </strong> {{book.loaned_to.email}} {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   {% else %}
     <p>No books/magazines are past due date.</p>
   {% endif %} 

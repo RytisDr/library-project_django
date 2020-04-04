@@ -21,7 +21,7 @@
           {% if request.user.is_staff %} 
           <li><a href="{% url 'catalog_app:past_due' %}">Past due</a></li>
           {% else %} 
-          <li><a href="">My check-outs</a></li>
+          <li><a href="{% url 'catalog_app:my_books' %}">My check-outs</a></li>
           {% endif %}
         </ul>
         <button onclick="location.href='{% url 'login_app:logout' %}';">Logout</button>

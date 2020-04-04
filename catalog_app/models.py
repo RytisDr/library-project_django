@@ -50,12 +50,13 @@ class Book(models.Model):
     def days_left(self):
         today = date.today()
         days_left = self.due_back - today
+        if(days_left.days == 1):
+            return "1 day left"
         if(days_left.days == 0):
             return "Today"
         if(days_left.days < 0):
             return "Overdue!"
-        else:
-            return f'{days_left.days} days left'
+        return f'{days_left.days} days left'
 
     @register.simple_tag
     def get_class_name(self):
@@ -112,6 +113,8 @@ class Magazine(models.Model):
     def days_left(self):
         today = date.today()
         days_left = self.due_back - today
+        if(days_left.days == 1):
+            return "1 day left"
         if(days_left.days == 0):
             return "Today"
         if(days_left.days < 0):

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Available magazines</h1>
+  {% if magazine_list %}
+  <ul>
+    {% for magazine in magazine_list %}
+      <li>
+        {{ magazine.title }} ({{magazine.issue}}) 
+      </li>
+      <form method="POST" action="{% url 'catalog_app:check_out_magazine' %}">
+      {% csrf_token %}
+      <button >Check-out</button>
+      <input type="hidden" name="id" value="{{ magazine.pk }}">
+      </form>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no magazines available.</p>
+  {% endif %}       
+{% endblock %}

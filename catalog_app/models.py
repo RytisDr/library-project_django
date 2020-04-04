@@ -69,7 +69,7 @@ class Magazine(models.Model):
     title = models.CharField(max_length=200)
     issue = models.DateField()
     summary = models.TextField(
-        max_length=1000, help_text='Enter a brief description of the book')
+        max_length=1000, help_text='Enter a brief description of the magazine')
     issn = models.CharField('ISSN', max_length=8,
                             help_text='8 Character ISSN')
     due_back = models.DateField(null=True, blank=True)

@@ -16,7 +16,8 @@
       {% block sidebar %}
         <ul class="sidebar-nav">
           <li><a href="{% url 'catalog_app:index' %}">Home</a></li>
-          <li><a href="{% url 'catalog_app:books' %}">All books</a></li>
+          <li><a href="{% url 'catalog_app:books' %}">Available books</a></li>
+          <li><a href="{% url 'catalog_app:magazines' %}">Available magazines</a></li>
           <li><a href="">All authors</a></li>
         </ul>
         <button onclick="location.href='{% url 'login_app:logout' %}';">Logout</button>

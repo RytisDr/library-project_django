@@ -10,8 +10,7 @@
               <li>
                 {{ magazine.title }} (issue: {{magazine.issue}}) -
                 <strong>Due by:</strong>
-                 {{magazine.due_back}}
-                 ({{ magazine.days_left }})
+                {{magazine.due_back}} ({{ magazine.days_left }})
               </li>
             {% endfor %}
         </ul>
@@ -21,8 +20,9 @@
             {% for book in my_books %}
               <li>
                 {{ book.title }} ({{book.author}}) -
-                <strong>Due by:</strong> {{book.due_back}} 
-              </li>
+                <strong>Due by:</strong>
+                 {{book.due_back}}
+                 ({{ book.days_left }})
             {% endfor %}
         </ul>
     {% endif %}

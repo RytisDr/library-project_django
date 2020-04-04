@@ -52,7 +52,7 @@ class Book(models.Model):
         if(days_left.days < 0):
             return "Overdue!"
         else:
-            return days_left.days + "days left"
+            return f'{days_left.days} days left'
 
     def __str__(self):
         return f'{self.title}'

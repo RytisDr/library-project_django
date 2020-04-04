@@ -4,7 +4,7 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 @login_required
@@ -35,14 +35,22 @@ def bookList(request):
 def check_out_book(request):
     if not request.POST:
         return HttpResponseRedirect(reverse('catalog_app:books'))
-    borrowed_books_amount = Book.objects.filter(loaned_to=request.user).count()
+    user = request.user
+    user_books = Book.objects.filter(loaned_to=user)
+    # check if any books past due date
+    for book in user_books:
+        due_back = book.due_back
+        if due_back < date.today():
+            return HttpResponse('<h1>You have some books past due date, return them first.</h1>')
+    # limit check-out to 10 books
+    borrowed_books_amount = user_books.count()
     if borrowed_books_amount < 10:
         pk = request.POST['id']
         book = get_object_or_404(Book, pk=pk)
         book.status = 'o'
-        book.loaned_to = request.user
+        book.loaned_to = user
         book.due_back = datetime.now()+timedelta(days=30)
-        book.save()
+        # book.save()
         return HttpResponseRedirect(reverse('catalog_app:books'))
     else:
         return HttpResponse('<h1>Cant borrow more than 10 books at the same time.</h1>')

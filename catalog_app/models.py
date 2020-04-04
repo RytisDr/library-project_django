@@ -63,3 +63,35 @@ class Author(models.Model):
 
     def __str__(self):
         return f'{self.last_name}, {self.first_name}'
+
+
+class Magazine(models.Model):
+    title = models.CharField(max_length=200)
+    issue = models.DateField()
+    summary = models.TextField(
+        max_length=1000, help_text='Enter a brief description of the book')
+    issn = models.CharField('ISSN', max_length=8,
+                            help_text='8 Character ISSN')
+    due_back = models.DateField(null=True, blank=True)
+    loaned_to = models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=True, null=True)
+    LOAN_STATUS = (
+        ('m', 'Maintenance'),
+        ('o', 'On loan'),
+        ('a', 'Available'),
+        ('r', 'Reserved'),
+    )
+
+    status = models.CharField(
+        max_length=1,
+        choices=LOAN_STATUS,
+        blank=True,
+        default='a',
+        help_text='Book availability',
+    )
+
+    class Meta:
+        ordering = ['due_back']
+
+    def __str__(self):
+        return f'{self.title}'

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from datetime import datetime, timedelta, date
+import collections
 
 
 @login_required
@@ -44,12 +45,17 @@ def magazine_list(request):
 def past_due(request):
     user = request.user
     if user.is_staff:
+        context = collections.defaultdict(list)
+        books_on_loan = Book.objects.filter(status="o")
         magazines_on_loan = Magazine.objects.filter(status="o")
         for magazine in magazines_on_loan:
+            if magazine.due_back < date.today():
+                context["late_magazines"].append(magazine)
 
-        books_on_loan = Book.objects.filter(status="o")
+        for book in books_on_loan:
+            if book.due_back < date.today():
+                context["late_books"].append(book)
 
-        context = {}
         return render(request, 'past_due.html', context)
     else:
         return HttpResponseRedirect(reverse('catalog_app:index'))
